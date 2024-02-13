@@ -1,0 +1,29 @@
+<!-- ******************************************************************************
+===================================================================================
+Purpose: To Display the list of matching addresses recieved from the GEOES service
+===================================================================================
+History:
+
+AUTHOR     DATE         Reference     Description
+Navin M    31/01/2022   ESCJ-379      Initial draft
+******************************************************************************** -->
+<template>
+    <template if:true={showMatchingAddresses}>
+        <lightning-card>
+            <div class="slds-box slds-box--x-small slds-theme_shade">
+                <h2>
+                    Matching Addresses: {totalNumberOfRows}
+                </h2>
+            </div>
+            <lightning-datatable
+                key-field="id"
+                data={data}
+                max-row-selection="1"
+                columns={columns}
+                onrowselection={handleRowAction}
+                selected-rows={selectedRows}
+                >
+            </lightning-datatable>
+        </lightning-card>
+    </template>
+</template>

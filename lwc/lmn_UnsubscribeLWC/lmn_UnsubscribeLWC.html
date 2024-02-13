@@ -1,0 +1,24 @@
+<template>
+  <div class="slds-grid slds-gutters slds-align_absolute-center slds-m-right_small slds-m-left_small" style="height: 100vh">
+    <lightning-card title="Unsubscribe Confirmation" icon-name="utility:warning">
+        <div class="slds-m-vertical_medium slds-align_absolute-center slds-m-right_small slds-m-left_small">
+          <p> {myMessage} <span class="slds-text-heading_small"></span></p>
+      </div>
+      <template lwc:if={showButton}>
+        <div slot="footer" class="slds-grid">
+            <div class="slds-col">
+           <lightning-button label="Stay Connected" title="Stay Connected" onclick={HandleClickStay} class="slds-m-left_x-small slds-align_absolute-center"></lightning-button>
+            </div>
+            <div class="slds-col">
+           <lightning-button label="Unsubscribe Me" title="Unsubscribe Me" onclick={handleClickGo} class="slds-m-left_x-small slds-align_absolute-center"></lightning-button>
+         </div>
+         </div>
+    </template>
+    <template if:true={working}>
+      <div class="spinner" style="position:relative;">
+        <lightning-spinner alternative-text="Unsubscribing...."></lightning-spinner>
+      </div>
+    </template>
+    </lightning-card>
+  </div>
+ </template>

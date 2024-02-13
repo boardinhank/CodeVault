@@ -1,0 +1,197 @@
+<template>
+    <template if:true={isModalOpen}>
+        <lightning-record-edit-form
+                    object-api-name="Lead"
+                    onsuccess={handleSuccess}
+                    onerror={handleError}
+                    onsubmit={handleSubmit}
+                    >
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_medium" style="position: absolute;z-index:1;">
+            <div class="slds-modal__container" style="padding-top: 2px; padding-bottom:2px">
+                <header class="slds-modal__header">
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Lead</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here --->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div><!-- container div -->
+                        <div>
+                            <div class="slds-box slds-box--x-small slds-theme_shade">
+                                <h2>
+                                    Lead Information
+                                </h2>
+                            </div>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="OwnerId"> </lightning-input-field>
+                                    <lightning-input-field field-name="LeadSource"> </lightning-input-field>
+                                    <lightning-input-field field-name="Region__c"> </lightning-input-field>
+                                    <lightning-input-field class="slds-hidden" field-name="Custom_Lead__c" value={customlead}></lightning-input-field>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field class="slds-hidden" field-name="Status" data-id="leadStatus" disabled> </lightning-input-field>
+                                    <lightning-input-field field-name="Lead_Type__c"> </lightning-input-field>
+                                    <lightning-input-field field-name="Market__c"> </lightning-input-field>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <div class="slds-box slds-box--x-small slds-theme_shade">
+                                <h2>
+                                    Contact
+                                </h2>
+                            </div>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="Name"> </lightning-input-field>
+                                    <lightning-input-field field-name="Email"> </lightning-input-field>
+                                </lightning-layout-item>
+
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="Phone"> </lightning-input-field>
+                                    <lightning-input-field field-name="MobilePhone"> </lightning-input-field>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <div class="slds-box slds-box--x-small slds-theme_shade">
+                                <h2>
+                                    Account Lookup
+                                </h2>
+                            </div>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="LeadAccountName__c" value={accountId} onchange={handleAccountChange}> </lightning-input-field>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <div class="slds-box slds-box--x-small slds-theme_shade">
+                                <h2>
+                                    Account Creation
+                                </h2>
+                            </div>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="Company" value={companyName}> </lightning-input-field>
+                                    <lightning-input-field field-name="Website"> </lightning-input-field>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="Address"> </lightning-input-field>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <div class="slds-box slds-box--x-small slds-theme_shade">
+                                <h2>
+                                    Existing Salesforce Property
+                                </h2>
+                            </div>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="Property__c" onchange={handlePropertyAddresssection}> </lightning-input-field>
+                                </lightning-layout-item>
+                                <!-- <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="Property_Request_Record__c"> </lightning-input-field>
+                                </lightning-layout-item> -->
+                            </lightning-layout>
+
+                            <div class="slds-box slds-box--x-small slds-theme_shade">
+                                <h2>
+                                    Network Database Address Search
+                                </h2>
+                            </div>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field data-id="addressInput"
+                                        class="validation-field"
+                                        field-name="Property_Address__c"
+                                        type="text"
+                                        label="Address"
+                                        value={addresValue}
+                                        onchange={reteriveAddressFromGeoAM}
+                                    >
+                                    </lightning-input-field>
+                                    <template
+                                        if:true={isRender}
+                                        for:each={returnedAddresses}
+                                        for:item="address"
+                                    >
+                                        <!-- For each require a key variable. Just displaying the full address portion of the address var-->
+                                        <option
+                                        style="background-color:#E0FFFF;font-weight:bold;"
+                                        key={address.key}
+                                        data-key={address.key}
+                                        data-mdu={address.mdu}
+                                        onmouseover={hoverAttribute}
+                                        onmouseout={hoverAttributeOver}
+                                        value={address.fullAddress}
+                                        onclick={pickSelectedAddressInfo}
+                                        >
+                                        {address.fullAddress}
+                                        </option>
+                                    </template>
+                                </lightning-layout-item>
+                            </lightning-layout>
+
+                            <div class="slds-box slds-box--x-small slds-theme_shade">
+                                <h2>
+                                    Property Address Entry
+                                </h2>
+                            </div>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="Property_Name__c" data-id="propName"> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Address_Street__c" data-id="propStreet" value={fields.Service_Street__c} onchange={handlePropertyAddressChange}> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Address_City__c" data-id="propCity" value={fields.Service_City__c} onchange={handlePropertyAddressChange}> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Address_State__c" data-id="propState" value={fields.Service_State__c} onchange={handlePropertyAddressChange}> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Address_Zip__c" data-id="propZip" value={fields.Service_Postal_Code__c} onchange={handlePropertyAddressChange}> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Latitude__c" data-id="propLat" value={fields.Service_Latitude__c} onchange={handlePropertyAddressChange}> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Longitude__c" data-id="propLong" value={fields.Service_Longitude__c} onchange={handlePropertyAddressChange}> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Association_Message__c" data-id="propMsg"> </lightning-input-field>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="Lead_Total_Units__c" data-id="propLTU"> </lightning-input-field>
+                                    <!-- <lightning-input-field field-name="Network_Wire_Center__c"> </lightning-input-field> -->
+                                    <lightning-input-field field-name="Property_First_Occupancy_Date__c" data-id="propFOD"> </lightning-input-field>
+                                    <lightning-input-field field-name="Construction_Start_Date__c" data-id="propCSD"> </lightning-input-field>
+                                    <lightning-input-field field-name="Construction_Completion_Date__c" data-id="propCCD"> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Type__c" data-id="propType"> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Structure__c" data-id="propstructure"> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Use__c" data-id="propuse"> </lightning-input-field>
+                                    <lightning-input-field field-name="Lead_Property_Development_Status__c" data-id="propStatus"> </lightning-input-field>
+                                    <lightning-input-field field-name="Property_Address_Validated__c" value={propertyAddressValidated} disabled> </lightning-input-field>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                            <!-- ************ Begin of ESCJ-379+:Navin M on 31/01/2022 **************** -->
+                            <c-validate-address-using-geoes
+                                address-details={addressDetails}
+                                onselectaddress={handleChangeSelectedAddress}
+                            >
+                            </c-validate-address-using-geoes>
+                            <!-- ************ End of ESCJ-379+:Navin M on 31/01/2022 **************** -->
+                            <div class="slds-box slds-box--x-small slds-theme_shade">
+                                <h2>
+                                    Marketing Assesment
+                                </h2>
+                            </div>
+                            <lightning-layout multiple-rows="true">
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="Referrer_Full_Name__c"> </lightning-input-field>
+                                    <lightning-input-field field-name="Referrer_EMail_Address__c"> </lightning-input-field>
+                                    <lightning-input-field field-name="Referrer_Sales_Code__c"> </lightning-input-field>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="6" class="slds-p-around_medium">
+                                    <lightning-input-field field-name="CampaignCode__c"> </lightning-input-field>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </div>
+                    </div><!-- end of container div -->
+                </div><!--body of modal popup-->
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer slds-align_center">
+                    <button class="slds-button slds-button_brand" type="button" onclick={valProAddress} title="Validate Property Address">Validate Property Address</button>
+                    <button  class="slds-button slds-button_brand" type="button" onclick={handleOnClick} disabled={disableBtn} title="Save">Save</button>
+                    <lightning-button class="slds-button slds-var-p-around_x-small" style="margin-left:0.25rem;" onclick={closeModal} label="Cancel"></lightning-button>
+                </footer>
+            </div><!--modal container-->
+        </section>
+    </lightning-record-edit-form>
+    </template>
+</template>

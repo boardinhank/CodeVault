@@ -1,0 +1,10 @@
+<template>
+    <template if:true={showModal}>    
+        <lightning-button class="slds-m-left_xxx-small" variant="brand"   label="Request Custom Contract"  onclick={createAction}></lightning-button>
+        
+        <div if:true={showSpinner} class="slds-is-relative">
+            <lightning-spinner class="spinner" alternative-text="Generating Contract..." variant="brand" size="medium"></lightning-spinner>
+            <p class="slds-spinner-text">Please Wait....</p>
+        </div>   
+    </template>
+</template>

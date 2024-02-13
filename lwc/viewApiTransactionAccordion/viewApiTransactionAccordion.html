@@ -1,0 +1,25 @@
+<template>
+	<lightning-accordion  class="example-accordion ctl-backgroundReqRespContainer"  onsectiontoggle={handleChange}  allow-multiple-sections-open>
+        <lightning-accordion-section name="RequestJSON" label="Request" >
+			<template if:true={jsonStringReq}>
+				<lightning-button-icon icon-name="utility:copy"  alternative-text="copy" title="Copy" data-value={reqJson} onclick={copyTo} class="slds-float_right">
+				</lightning-button-icon>
+                <pre class="jsonReq">{jsonStringReq}</pre>
+			</template>
+			<template if:true={error}>
+				{error}
+			</template>
+        </lightning-accordion-section>
+
+         <lightning-accordion-section name="ResponseJSON" label="Response" >
+			<template if:true={jsonStringResponse}>
+				<lightning-button-icon icon-name="utility:copy"  alternative-text="copy" title="Copy" data-value={respJson} onclick={copyTo} class="slds-float_right">
+				</lightning-button-icon>
+                <pre class="jsonResp"  >{jsonStringResponse}</pre>
+			</template>
+			<template if:true={error}>
+				{error}
+			</template>
+        </lightning-accordion-section> 
+    </lightning-accordion>
+</template>

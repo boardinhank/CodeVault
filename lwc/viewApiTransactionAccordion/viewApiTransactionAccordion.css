@@ -1,0 +1,4 @@
+.ctl-backgroundReqRespContainer {
+    background: #fff;
+    border-radius: var(--lwc-borderRadiusMedium,0.25rem);
+}

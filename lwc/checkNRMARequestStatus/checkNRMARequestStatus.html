@@ -1,0 +1,20 @@
+<template>
+    <lightning-quick-action-panel header="Check NRMA Request Status Action">
+        <lightning-record-edit-form record-id={recordId}
+                                    object-api-name={objectApiName}
+                                    onsuccess={handleSuccess}>
+
+            <div id="divCheckNRMAStatus" class="slds-is-relative">
+                <template if:true={showCheckNRMAStatusTimer}>
+                    <span id="checkNRMARequestStatusTimer" class="checkNRMARequestStatusTimer">{checkStatusTimerText}</span>                    
+                </template>
+                <template  if:true={showCheckNRMAStatusButton}>
+                    <button id="checkNRMARequestStatusButton" class="checkNRMARequestStatusButton" onclick={checkNRMARequestStatusAction} title="Check NRMA Request Status">Check NRMA Request Status</button>
+                </template> 
+                <template if:true={showSpinner}>
+                    <lightning-spinner id="checkNRMARequestSpinner" alternative-text="Checking NRMA Request Status..." variant="brand" size="small"></lightning-spinner>
+                </template>
+            </div>   
+        </lightning-record-edit-form>			
+    </lightning-quick-action-panel>
+</template>
